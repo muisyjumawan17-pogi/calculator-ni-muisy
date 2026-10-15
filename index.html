@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ceb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111214">
+<meta name="description" content="Calculator ni Muisy — Bisaya Edition">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Calculator ni Muisy</title>
+<style>
+:root{color-scheme:dark;--bg:#0b0c0e;--panel:#141517;--line:#393329;--gold:#e1b857;--muted:#b4ad9e;--text:#f7f3e9}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#242016 0,#0b0c0e 48%);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.wrap{max-width:520px;margin:auto;padding:18px 14px 32px}.card{background:rgba(20,21,23,.97);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:13px;box-shadow:0 12px 28px #0003}
+.brand{text-align:center;padding:10px 0 4px}.eyebrow{font-size:11px;letter-spacing:3px;color:var(--gold)}h1{font-size:25px;line-height:1.15;margin:7px 0}.subtitle{color:var(--muted);font-size:12px;letter-spacing:1px}.balancebox{background:linear-gradient(135deg,#201d17,#151515);border:1px solid #423722;border-radius:14px;padding:14px;margin-top:15px}.balance{font-size:29px;font-weight:850;color:var(--gold);letter-spacing:-.5px}.muted{color:var(--muted)}.display{background:#08090a;border:1px solid #292929;border-radius:14px;padding:15px;text-align:right;min-height:94px;display:flex;flex-direction:column;justify-content:center}.expr{font-size:13px;color:var(--muted);overflow-wrap:anywhere;min-height:22px}.answer{font-size:35px;font-weight:750;overflow-wrap:anywhere}
+.keys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}.key{min-height:53px;border:1px solid #383838;border-radius:12px;background:#202124;color:var(--text);font-size:19px;font-weight:650}.op{background:#302717;color:var(--gold)}.key.gold,.gold{background:var(--gold);color:#17130a;border-color:var(--gold)}.hidden{display:none!important}.notice{background:#211d14;color:#e9cc84;padding:12px;border-radius:11px;font-size:14px;margin-bottom:12px}.footer{text-align:center;font-size:11px;color:var(--muted);padding:8px}
+input{width:100%;background:#202124;color:white;border:1px solid #514326;border-radius:11px;padding:13px;margin:7px 0 12px;font-size:16px}.btn{min-height:47px;border:1px solid #514326;border-radius:11px;padding:11px;background:#211d14;color:var(--gold);font-weight:800;font-size:14px}.welcome{text-align:center;padding:23px 18px}.welcome h2{margin:5px 0 8px}.welcome p{font-size:14px;color:var(--muted)}h2{font-size:18px;margin:0 0 10px}.pay-card{overflow:hidden;border-color:#315f9c}.pay-head{background:linear-gradient(125deg,#0d5fd3,#073b91);margin:-16px -16px 16px;padding:18px;color:white}.pay-brand{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:850}.pay-logo{display:grid;place-items:center;width:37px;height:37px;background:white;color:#0751b4;border-radius:50%;font-weight:900;font-size:18px}.pay-sub{font-size:12px;opacity:.9;margin-top:4px}.merchant{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #333}.merchant-icon{width:43px;height:43px;display:grid;place-items:center;border-radius:12px;background:#272318;color:var(--gold);font-size:22px}.merchant-info{flex:1}.merchant-info strong{display:block}.merchant-info small{color:var(--muted)}.amount{text-align:center;padding:17px 0}.amount small{color:var(--muted)}.amount strong{display:block;font-size:34px;color:var(--gold);margin-top:3px}.pay-detail{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:8px 0}.pay-button{width:100%;background:#1265d6;color:white;border:0;border-radius:12px;min-height:49px;font-weight:850;margin-top:12px}.cancel-button{width:100%;margin-top:8px;background:transparent;border:1px solid #444;color:var(--muted);border-radius:11px;min-height:43px}.simulation{font-size:11px;color:#e8c979;background:#211d14;border:1px solid #4b3b1c;border-radius:10px;padding:10px;margin-top:12px}.status{font-size:13px;margin-top:12px;overflow-wrap:anywhere}.success{color:#82e2a1}.error{color:#ffb2a7}
+@media(min-width:480px){.wrap{padding-top:24px}.card{padding:18px}.key{min-height:57px}.pay-head{margin:-18px -18px 18px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<section class="card brand">
+ <div class="eyebrow">MUISY EMPIRE PRESENTS</div>
+ <h1>CALCULATOR NI MUISY</h1>
+ <div class="subtitle">SIMPLE CALCULATOR · BISAYA EDITION</div>
+</section>
+
+<section class="card welcome" id="welcome">
+ <h2>Una sa tanan, kinsa imong ngalan? 👀</h2>
+ <p>Kinahanglan imong ngalan aron makasulod sa calculator.</p>
+ <form id="nameForm">
+  <input id="nameInput" maxlength="30" placeholder="Isulat imong ngalan..." autocomplete="given-name" required>
+  <button class="btn gold" style="width:100%" type="submit">SULOD SA CALCULATOR →</button>
+ </form>
+ <p id="nameError" class="hidden" style="color:#ffb2a7">Kinahanglan jud imong ngalan, bro! 😂</p>
+</section>
+
+<div id="app" class="hidden">
+ <section class="card">
+  <div class="balancebox">
+   <div class="muted" style="font-size:13px">BALANCE · <span id="nameLabel">User</span></div>
+   <div class="balance" id="balance">₱10,000.00</div>
+  </div>
+ </section>
+ <div class="notice" id="message" role="status" aria-live="polite">Andam na ang calculator!</div>
+ <section class="card">
+  <div class="display"><div class="expr" id="expression">Andam na!</div><output class="answer" id="display">0</output></div>
+  <div class="keys" id="keys">
+   <button class="key" data-k="AC">AC</button><button class="key" data-k="back">⌫</button><button class="key op" data-k="%">%</button><button class="key op" data-k="/">÷</button>
+   <button class="key" data-k="7">7</button><button class="key" data-k="8">8</button><button class="key" data-k="9">9</button><button class="key op" data-k="*">×</button>
+   <button class="key" data-k="4">4</button><button class="key" data-k="5">5</button><button class="key" data-k="6">6</button><button class="key op" data-k="-">−</button>
+   <button class="key" data-k="1">1</button><button class="key" data-k="2">2</button><button class="key" data-k="3">3</button><button class="key op" data-k="+">+</button>
+   <button class="key" data-k="sign">±</button><button class="key" data-k="0">0</button><button class="key" data-k=".">.</button><button class="key gold" data-k="=">=</button>
+  </div>
+  <p class="muted" style="font-size:12px;margin-bottom:0">Heads up: matag pindot sa = kay ₱1,000 ang simulation fee. 😂</p>
+ </section>
+</div>
+
+<section class="card pay-card hidden" id="paymentPanel" aria-live="polite">
+ <div class="pay-head">
+  <div class="pay-brand"><span class="pay-logo">G</span><span>GCash-style Checkout</span></div>
+  <div class="pay-sub">Secure payment experience · Demo screen</div>
+ </div>
+ <div class="merchant">
+  <div class="merchant-icon">🧮</div>
+  <div class="merchant-info"><strong>Calculator ni Muisy</strong><small>Merchant · Demo transaction</small></div>
+  <strong>₱1,000.00</strong>
+ </div>
+ <div class="amount"><small>AMOUNT TO PAY</small><strong>₱1,000.00</strong></div>
+ <div class="pay-detail"><span>Payment method</span><strong>GCash-style wallet</strong></div>
+ <div class="pay-detail"><span>Account name</span><strong id="payerName">—</strong></div>
+ <div class="pay-detail"><span>Reference number</span><strong id="reference">DEMO-000000</strong></div>
+ <div class="simulation"><strong>DEMO ONLY:</strong> Kini nga screen pang-simulation ra. Dili kini tinuod nga GCash page, walay tinuod nga payment, ug walay kwarta nga ipadala.</div>
+ <button class="pay-button" id="payBtn">CONFIRM DEMO PAYMENT · ₱1,000</button>
+ <button class="cancel-button" id="cancelPayBtn">Kanselahon</button>
+ <p id="payResult" class="status muted" role="status"></p>
+</section>
+
+<div class="footer">Muisy Empire · For fun only</div>
+</main>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id);
+const PAYMENT_FEE=1000;
+let name='',balance=10000,expr='',pending=null,serial=0;
+const money=n=>'₱'+n.toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
+function say(s){$('message').textContent=s}
+function draw(){
+ $('balance').textContent=money(balance);
+ $('nameLabel').textContent=name||'User';
+ $('display').textContent=expr||'0';
+ $('expression').textContent=pending?'Ready to confirm demo payment':(expr?'Imong computation':'Andam na!');
+}
+function compute(s){
+ if(!/^[0-9+*/.()%-]+$/.test(s)||!/[0-9]/.test(s)||/[+*/%-]$/.test(s))throw Error('Dili sakto o kulang ang equation, bro!');
+ const n=Function('"use strict";return ('+s+')')();
+ if(!Number.isFinite(n))throw Error('Dili pwede na nga tubag!');
+ return n;
+}
+function openPayment(answer,text){
+ if(balance<PAYMENT_FEE){
+  say(`Aw, ${name.toUpperCase()}, kulang imong balance para sa ₱1,000 demo fee. 😂`);
+  $('paymentPanel').classList.add('hidden');
+  return;
+ }
+ pending={answer,text,fee:PAYMENT_FEE};
+ serial++;
+ $('payerName').textContent=name;
+ $('reference').textContent='DEMO-'+String(Date.now()).slice(-8)+'-'+String(serial).padStart(2,'0');
+ $('payResult').textContent='';
+ $('payResult').className='status muted';
+ $('paymentPanel').classList.remove('hidden');
+ $('paymentPanel').scrollIntoView({behavior:'smooth',block:'start'});
+ say(`Hoy ${name}! ₱1,000 na ang bayad kada equals. Padayon? 😂`);
+}
+function press(k){
+ if(k==='AC'){expr='';pending=null;draw();say('Cleared na, '+name+'!');return}
+ if(k==='back'){expr=expr.slice(0,-1);pending=null;draw();return}
+ if(k==='sign'){const m=expr.match(/(-?\d*\.?\d+)$/);if(m)expr=expr.slice(0,m.index)+(m[0].startsWith('-')?m[0].slice(1):'-'+m[0]);draw();return}
+ if(k==='='){
+  if(!expr)return;
+  try{const answer=compute(expr);openPayment(answer,expr+' = '+String(Number(answer.toPrecision(12))))}
+  catch(e){say(e.message)}
+  return;
+ }
+ if(k==='%'){const m=expr.match(/\d*\.?\d+$/);if(m)expr=expr.slice(0,m.index)+String(Number(m[0])/100);draw();return}
+ if(k==='.'){const part=expr.split(/[+*/%-]/).pop();if(part.includes('.'))return;if(!part)expr+='0';expr+='.'}
+ else if(/[+*/%-]/.test(k)){if(!expr&&k!=='-')return;if(/[+*/%-]$/.test(expr))expr=expr.slice(0,-1);expr+=k}
+ else expr+=k;
+ pending=null;draw();
+}
+$('nameForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ name=$('nameInput').value.trim();
+ if(!name){$('nameError').classList.remove('hidden');$('nameInput').focus();return}
+ $('welcome').classList.add('hidden');$('app').classList.remove('hidden');
+ say(`Maayong adlaw, ${name}! Welcome sa calculator. Ayaw kalimot, ₱1,000 kada equals! HAHAHA!`);
+ draw();
+});
+$('keys').addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(b)press(b.dataset.k)});
+$('payBtn').addEventListener('click',()=>{
+ if(!pending){$('payResult').textContent='Walay pending nga demo transaction.';return}
+ if(balance<PAYMENT_FEE){$('payResult').textContent='Kulang ang demo balance.';return}
+ balance-=PAYMENT_FEE;
+ expr=String(Number(pending.answer.toPrecision(12)));
+ const answer=expr, original=pending.text;
+ pending=null;
+ draw();
+ $('payResult').className='status success';
+ $('payResult').textContent='✓ DEMO PAYMENT SUCCESSFUL · ₱1,000.00 · Walay tinuod nga kwarta nga nabayran. Result: '+answer;
+ $('paymentPanel').classList.add('hidden');
+ say(`Salamat sa demo, ${name}! Ang resulta kay ${answer}. Muisy Empire na pud! 😂`);
+});
+$('cancelPayBtn').addEventListener('click',()=>{
+ pending=null;$('paymentPanel').classList.add('hidden');say('Gi-cancel ang demo payment. Wala kay nabayran, '+name+'!');draw();
+});
+document.addEventListener('keydown',e=>{
+ if($('app').classList.contains('hidden')||e.target.matches('input'))return;
+ const map={'Enter':'=','Escape':'AC','Backspace':'back'};
+ if(map[e.key]){e.preventDefault();press(map[e.key])}
+ else if('0123456789.+-*/%'.includes(e.key))press(e.key);
+});
+if('serviceWorker' in navigator&&location.protocol!=='file:')window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+})();
+</script>
+</body>
+</html>
